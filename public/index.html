@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gyro Quiz - 登入</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --background: 0 0% 100%;
+      --foreground: 240 10% 3.9%;
+      --card: 0 0% 100%;
+      --card-foreground: 240 10% 3.9%;
+      --primary: 240 5.9% 10%;
+      --primary-foreground: 0 0% 98%;
+      --secondary: 240 4.8% 95.9%;
+      --secondary-foreground: 240 5.9% 10%;
+      --muted: 240 4.8% 95.9%;
+      --muted-foreground: 240 3.8% 46.1%;
+      --accent: 240 4.8% 95.9%;
+      --accent-foreground: 240 5.9% 10%;
+      --destructive: 0 84.2% 60.2%;
+      --destructive-foreground: 0 0% 98%;
+      --border: 240 5.9% 90%;
+      --input: 240 5.9% 90%;
+      --ring: 240 5.9% 10%;
+      --radius: 0.5rem;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: hsl(var(--muted));
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      color: hsl(var(--foreground));
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .card {
+      background: hsl(var(--card));
+      border-radius: var(--radius);
+      border: 1px solid hsl(var(--border));
+      padding: 24px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    }
+
+    .card-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .card-title {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      margin-bottom: 8px;
+    }
+
+    .card-description {
+      color: hsl(var(--muted-foreground));
+      font-size: 14px;
+    }
+
+    .tabs-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+      background: hsl(var(--muted));
+      padding: 4px;
+      border-radius: var(--radius);
+      margin-bottom: 24px;
+    }
+
+    .tab-trigger {
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      border: none;
+      background: transparent;
+      color: hsl(var(--muted-foreground));
+      border-radius: calc(var(--radius) - 2px);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-trigger:hover {
+      color: hsl(var(--foreground));
+    }
+
+    .tab-trigger.active {
+      background: hsl(var(--background));
+      color: hsl(var(--foreground));
+      box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .input {
+      width: 100%;
+      height: 40px;
+      padding: 8px 12px;
+      font-size: 14px;
+      border: 1px solid hsl(var(--input));
+      border-radius: var(--radius);
+      background: transparent;
+      color: hsl(var(--foreground));
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input::placeholder {
+      color: hsl(var(--muted-foreground));
+    }
+
+    .input:focus {
+      outline: none;
+      border-color: hsl(var(--ring));
+      box-shadow: 0 0 0 2px hsl(var(--ring) / 0.2);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 40px;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background-color 0.2s, opacity 0.2s;
+    }
+
+    .btn-primary {
+      background: hsl(var(--primary));
+      color: hsl(var(--primary-foreground));
+    }
+
+    .btn-primary:hover {
+      background: hsl(var(--primary) / 0.9);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .alert {
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      font-size: 14px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .alert.show {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .alert-error {
+      background: hsl(var(--destructive) / 0.1);
+      color: hsl(var(--destructive));
+      border: 1px solid hsl(var(--destructive) / 0.2);
+    }
+
+    .alert-success {
+      background: hsl(142 76% 36% / 0.1);
+      color: hsl(142 76% 36%);
+      border: 1px solid hsl(142 76% 36% / 0.2);
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid currentColor;
+      border-radius: 50%;
+      border-right-color: transparent;
+      animation: spin 0.6s linear infinite;
+      margin-right: 8px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .token-panel {
+      display: none;
+      margin-top: 16px;
+      padding: 16px;
+      background: hsl(var(--muted));
+      border-radius: var(--radius);
+      border: 1px solid hsl(var(--border));
+    }
+
+    .token-panel.show {
+      display: block;
+    }
+
+    .token-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .token-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .btn-copy {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      border: 1px solid hsl(var(--border));
+      border-radius: var(--radius);
+      background: hsl(var(--background));
+      color: hsl(var(--foreground));
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn-copy:hover {
+      background: hsl(var(--accent));
+    }
+
+    .btn-copy .icon {
+      width: 14px;
+      height: 14px;
+    }
+
+    .token-content {
+      background: hsl(var(--background));
+      border: 1px solid hsl(var(--border));
+      border-radius: var(--radius);
+      padding: 12px;
+      margin-bottom: 12px;
+      overflow-x: auto;
+    }
+
+    .token-content code {
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+      font-size: 12px;
+      word-break: break-all;
+      color: hsl(var(--foreground));
+    }
+
+    .token-info {
+      font-size: 13px;
+      color: hsl(var(--muted-foreground));
+    }
+
+    .token-info div {
+      margin-bottom: 4px;
+    }
+
+    .token-info strong {
+      color: hsl(var(--foreground));
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="card-header">
+      <h1 class="card-title">Gyro Quiz</h1>
+      <p class="card-description">登入您的帳號以繼續</p>
+    </div>
+
+    <div class="tabs-list">
+      <button class="tab-trigger active" data-tab="login">登入</button>
+      <button class="tab-trigger" data-tab="register">註冊</button>
+    </div>
+
+    <div class="alert alert-error" id="error">
+      <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span id="errorText"></span>
+    </div>
+
+    <div class="alert alert-success" id="success">
+      <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+        <polyline points="22 4 12 14.01 9 11.01"/>
+      </svg>
+      <span>登入成功！</span>
+    </div>
+
+    <!-- Token Display -->
+    <div class="token-panel" id="tokenPanel">
+      <div class="token-header">
+        <span class="token-title">Access Token</span>
+        <button class="btn-copy" id="copyBtn" onclick="copyToken()">
+          <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+          複製
+        </button>
+      </div>
+      <div class="token-content">
+        <code id="tokenValue"></code>
+      </div>
+      <div class="token-info">
+        <div><strong>User ID:</strong> <span id="userIdValue"></span></div>
+        <div><strong>Email:</strong> <span id="emailValue"></span></div>
+      </div>
+    </div>
+
+    <!-- Login Form -->
+    <form class="tab-content active" id="loginForm">
+      <div class="form-group">
+        <label class="label" for="loginEmail">電子郵件</label>
+        <input class="input" type="email" id="loginEmail" required placeholder="name@example.com">
+      </div>
+      <div class="form-group">
+        <label class="label" for="loginPassword">密碼</label>
+        <input class="input" type="password" id="loginPassword" required placeholder="輸入您的密碼">
+      </div>
+      <button type="submit" class="btn btn-primary" id="loginBtn">登入</button>
+    </form>
+
+    <!-- Register Form -->
+    <form class="tab-content" id="registerForm">
+      <div class="form-group">
+        <label class="label" for="registerEmail">電子郵件</label>
+        <input class="input" type="email" id="registerEmail" required placeholder="name@example.com">
+      </div>
+      <div class="form-group">
+        <label class="label" for="registerPassword">密碼</label>
+        <input class="input" type="password" id="registerPassword" required minlength="6" placeholder="至少 6 個字元">
+      </div>
+      <div class="form-group">
+        <label class="label" for="confirmPassword">確認密碼</label>
+        <input class="input" type="password" id="confirmPassword" required placeholder="再次輸入密碼">
+      </div>
+      <button type="submit" class="btn btn-primary" id="registerBtn">建立帳號</button>
+    </form>
+  </div>
+
+  <script>
+    const API_BASE = '/api/oauth';
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectUri = urlParams.get('redirect_uri') || 'gyroquiz://auth';
+
+    // Tab switching
+    document.querySelectorAll('.tab-trigger').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab-trigger').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(f => f.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab + 'Form').classList.add('active');
+        hideError();
+      });
+    });
+
+    function showError(message) {
+      document.getElementById('errorText').textContent = message;
+      document.getElementById('error').classList.add('show');
+    }
+
+    function hideError() {
+      document.getElementById('error').classList.remove('show');
+    }
+
+    function showSuccess() {
+      document.getElementById('success').classList.add('show');
+    }
+
+    function setLoading(btn, loading) {
+      if (loading) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner"></span>處理中...';
+      } else {
+        btn.disabled = false;
+        btn.textContent = btn.id === 'loginBtn' ? '登入' : '建立帳號';
+      }
+    }
+
+    function showTokenPanel(data) {
+      document.getElementById('tokenValue').textContent = data.token;
+      document.getElementById('userIdValue').textContent = data.userId;
+      document.getElementById('emailValue').textContent = data.email;
+      document.getElementById('tokenPanel').classList.add('show');
+      
+      // Hide forms
+      document.getElementById('loginForm').style.display = 'none';
+      document.getElementById('registerForm').style.display = 'none';
+      document.querySelectorAll('.tabs-list').forEach(el => el.style.display = 'none');
+    }
+
+    function copyToken() {
+      const token = document.getElementById('tokenValue').textContent;
+      navigator.clipboard.writeText(token).then(() => {
+        const btn = document.getElementById('copyBtn');
+        btn.innerHTML = `<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>已複製`;
+        setTimeout(() => {
+          btn.innerHTML = `<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>複製`;
+        }, 2000);
+      });
+    }
+
+    function redirectToApp(data) {
+      showSuccess();
+      showTokenPanel(data);
+      
+      // Only redirect if not default (testing mode)
+      if (urlParams.get('redirect_uri')) {
+        const params = new URLSearchParams({
+          token: data.token,
+          userId: data.userId,
+          email: data.email
+        });
+        setTimeout(() => {
+          window.location.href = `${redirectUri}?${params.toString()}`;
+        }, 2000);
+      }
+    }
+
+    // Login form
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideError();
+      
+      const btn = document.getElementById('loginBtn');
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+
+      setLoading(btn, true);
+
+      try {
+        const res = await fetch(`${API_BASE}/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || '登入失敗');
+        redirectToApp(data);
+      } catch (err) {
+        showError(err.message);
+        setLoading(btn, false);
+      }
+    });
+
+    // Register form
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideError();
+
+      const btn = document.getElementById('registerBtn');
+      const email = document.getElementById('registerEmail').value;
+      const password = document.getElementById('registerPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      if (password !== confirmPassword) {
+        showError('密碼不一致');
+        return;
+      }
+
+      setLoading(btn, true);
+
+      try {
+        const res = await fetch(`${API_BASE}/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || '註冊失敗');
+        redirectToApp(data);
+      } catch (err) {
+        showError(err.message);
+        setLoading(btn, false);
+      }
+    });
+  </script>
+</body>
+</html>
