@@ -300,6 +300,20 @@
     .token-info strong {
       color: hsl(var(--foreground));
     }
+
+    .docs-link {
+      display: inline-block;
+      margin-top: 12px;
+      font-size: 14px;
+      color: hsl(var(--muted-foreground));
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .docs-link:hover {
+      color: hsl(var(--foreground));
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -307,6 +321,7 @@
     <div class="card-header">
       <h1 class="card-title">Gyro Quiz</h1>
       <p class="card-description">登入您的帳號以繼續</p>
+      <a href="/docs" class="docs-link">API 文件</a>
     </div>
 
     <div class="tabs-list">
