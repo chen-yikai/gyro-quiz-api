@@ -5,3 +5,4 @@ Dockerfile
 .dockerignore
 README.md
 *.log
+oauth.json

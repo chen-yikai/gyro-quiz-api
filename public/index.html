@@ -301,6 +301,18 @@
       color: hsl(var(--foreground));
     }
 
+    .redirect-url-panel {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid hsl(var(--border));
+    }
+
+    .redirect-url-label {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
     .docs-link {
       display: inline-block;
       margin-top: 12px;
@@ -332,6 +344,24 @@
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       font-weight: 500;
     }
+
+    .redirect-example {
+      margin-top: 4px;
+      padding: 8px 12px;
+      background: hsl(var(--muted));
+      border: 1px solid hsl(var(--border));
+      border-radius: var(--radius);
+      font-size: 11px;
+      color: hsl(var(--muted-foreground));
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+      word-break: break-all;
+    }
+
+    .redirect-example::before {
+      content: "範例: ";
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-weight: 500;
+    }
   </style>
 </head>
 <body>
@@ -340,6 +370,7 @@
       <h1 class="card-title">Gyro Quiz</h1>
       <p class="card-description">登入您的帳號以繼續</p>
       <p class="redirect-hint" id="redirectHint"></p>
+      <p class="redirect-example" id="redirectExample"></p>
       <a href="/docs" class="docs-link">API 文件</a>
     </div>
 
@@ -384,6 +415,12 @@
         <div><strong>User ID:</strong> <span id="userIdValue"></span></div>
         <div><strong>Email:</strong> <span id="emailValue"></span></div>
       </div>
+      <div class="redirect-url-panel">
+        <div class="redirect-url-label">Redirect URL:</div>
+        <div class="token-content">
+          <code id="redirectUrlValue"></code>
+        </div>
+      </div>
     </div>
 
     <!-- Login Form -->
@@ -424,6 +461,7 @@
 
     // Show redirect URI hint
     document.getElementById('redirectHint').textContent = redirectUri;
+    document.getElementById('redirectExample').textContent = `${redirectUri}?token=eyJhbG...&userId=abc123&email=user@example.com`;
 
     // Tab switching
     document.querySelectorAll('.tab-trigger').forEach(tab => {
@@ -464,6 +502,14 @@
       document.getElementById('userIdValue').textContent = data.userId;
       document.getElementById('emailValue').textContent = data.email;
       document.getElementById('tokenPanel').classList.add('show');
+      
+      // Show full redirect URL
+      const params = new URLSearchParams({
+        token: data.token,
+        userId: data.userId,
+        email: data.email
+      });
+      document.getElementById('redirectUrlValue').textContent = `${redirectUri}?${params.toString()}`;
       
       // Hide forms
       document.getElementById('loginForm').style.display = 'none';

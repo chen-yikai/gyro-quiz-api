@@ -1,0 +1,22 @@
+{
+  "data": [
+    {
+      "id": "1774062769375-50be1rw",
+      "userId": "user-1774062628065-it5klpa",
+      "difficulty": "easy",
+      "score": 1,
+      "questions": [
+        {
+          "questionId": 1,
+          "options": [
+            {
+              "optionId": 1,
+              "attempts": 0
+            }
+          ]
+        }
+      ],
+      "createdAt": "2026-03-21T03:12:49.375Z"
+    }
+  ]
+}
