@@ -64,6 +64,11 @@ const questions = new Elysia({
         return sort === "asc" ? comparison : -comparison;
       });
 
+      const limit = query.limit;
+      if (limit) {
+        return sorted.slice(0, limit);
+      }
+
       return sorted;
     },
     {
@@ -86,11 +91,12 @@ const questions = new Elysia({
           ])
         ),
         sort: t.Optional(t.Union([t.Literal("asc"), t.Literal("desc")])),
+        limit: t.Optional(t.Numeric({ minimum: 1, description: "限制返回的題目數量" })),
       }),
       detail: {
         summary: "取得題目列表",
         description:
-          "取得所有題目，支援依難度篩選、排序功能。可依 ID、內容或難度進行排序。",
+          "取得所有題目，支援依難度篩選、排序功能。可依 ID、內容或難度進行排序，並可透過 limit 限制返回數量。",
       },
     }
   )

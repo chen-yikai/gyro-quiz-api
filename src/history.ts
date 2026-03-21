@@ -61,15 +61,39 @@ const history = new Elysia({
   })
   .get(
     "/",
-    async ({ user }) => {
+    async ({ user, query }) => {
       const parsed = await readHistoryJson();
       // Only return current user's history
-      return parsed.data.filter((entry) => entry.userId === user!.userId);
+      const userHistory = parsed.data.filter((entry) => entry.userId === user!.userId);
+      
+      // Sort by createdAt descending (newest first)
+      userHistory.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      
+      const page = query.page ?? 1;
+      const limit = query.limit ?? 10;
+      const total = userHistory.length;
+      const totalPages = Math.ceil(total / limit);
+      const start = (page - 1) * limit;
+      const end = start + limit;
+      
+      return {
+        data: userHistory.slice(start, end),
+        pagination: {
+          page,
+          limit,
+          total,
+          totalPages,
+        },
+      };
     },
     {
+      query: t.Object({
+        page: t.Optional(t.Numeric({ minimum: 1, default: 1, description: "頁碼，從 1 開始" })),
+        limit: t.Optional(t.Numeric({ minimum: 1, maximum: 100, default: 10, description: "每頁筆數，最多 100" })),
+      }),
       detail: {
         summary: "取得作答紀錄列表",
-        description: "取得當前使用者的所有作答紀錄。需要 Bearer Token 驗證。",
+        description: "取得當前使用者的所有作答紀錄，支援分頁。需要 Bearer Token 驗證。",
         security: [{ bearerAuth: [] }],
       },
     }

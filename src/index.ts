@@ -7,8 +7,8 @@ import cors from "@elysiajs/cors";
 const port = process.env.PORT || 3000;
 
 const staticRoute = new Elysia({ detail: { hide: true } }).use(
-  staticPlugin({ assets: "public", prefix: "/" })
-) ;
+  staticPlugin({ assets: "public", prefix: "/" }),
+);
 
 new Elysia()
   .use(cors())
@@ -40,7 +40,10 @@ new Elysia()
           },
         },
       },
-    })
+      scalar: {
+        defaultOpenAllTags: true,
+      },
+    }),
   )
   .get(
     "/",
@@ -49,7 +52,7 @@ new Elysia()
       return redirect(
         `/index.html${
           redirectUri ? `?redirect_uri=${encodeURIComponent(redirectUri)}` : ""
-        }`
+        }`,
       );
     },
     {
@@ -58,15 +61,16 @@ new Elysia()
           t.String({
             default: "gyroquiz://auth",
             description: "登入成功後的跳轉網址，用於行動應用程式 Deep Link",
-          })
+          }),
         ),
       }),
       detail: {
         tags: ["頁面"],
         summary: "OAuth 登入頁面",
-        description: "開啟登入/註冊頁面。登入成功後會將 token、userId、email 透過 redirect_uri 回傳給行動應用程式。回傳格式: `{redirect_uri}?token={token}&userId={userId}&email={email}`。範例: `gyroquiz://auth?token=eyJhbG...&userId=abc123&email=user@example.com`",
+        description:
+          "開啟登入/註冊頁面。登入成功後會將 token、userId、email 透過 redirect_uri 回傳給行動應用程式。回傳格式: `{redirect_uri}?token={token}&userId={userId}&email={email}`。範例: `gyroquiz://auth?token=eyJhbG...&userId=abc123&email=user@example.com`",
       },
-    }
+    },
   )
   .use(api)
   .use(staticRoute)
