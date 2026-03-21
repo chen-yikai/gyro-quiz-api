@@ -314,6 +314,24 @@
       color: hsl(var(--foreground));
       text-decoration: underline;
     }
+
+    .redirect-hint {
+      margin-top: 8px;
+      padding: 8px 12px;
+      background: hsl(var(--muted));
+      border: 1px solid hsl(var(--border));
+      border-radius: var(--radius);
+      font-size: 12px;
+      color: hsl(var(--muted-foreground));
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+      word-break: break-all;
+    }
+
+    .redirect-hint::before {
+      content: "Redirect URI: ";
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-weight: 500;
+    }
   </style>
 </head>
 <body>
@@ -321,6 +339,7 @@
     <div class="card-header">
       <h1 class="card-title">Gyro Quiz</h1>
       <p class="card-description">登入您的帳號以繼續</p>
+      <p class="redirect-hint" id="redirectHint"></p>
       <a href="/docs" class="docs-link">API 文件</a>
     </div>
 
@@ -402,6 +421,9 @@
     const API_BASE = '/api/oauth';
     const urlParams = new URLSearchParams(window.location.search);
     const redirectUri = urlParams.get('redirect_uri') || 'gyroquiz://auth';
+
+    // Show redirect URI hint
+    document.getElementById('redirectHint').textContent = redirectUri;
 
     // Tab switching
     document.querySelectorAll('.tab-trigger').forEach(tab => {
