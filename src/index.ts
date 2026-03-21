@@ -11,6 +11,10 @@ const staticRoute = new Elysia({ detail: { hide: true } }).use(
 );
 
 new Elysia()
+  .onRequest(({ request }) => {
+    const timestamp = new Date().toISOString();
+    console.log(`[${timestamp}] ${request.method} ${request.url}`);
+  })
   .use(cors())
   .use(
     openapi({
