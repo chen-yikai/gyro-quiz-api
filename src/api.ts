@@ -2,6 +2,7 @@ import { Elysia, t } from "elysia";
 import questions from "./questions";
 import history from "./history";
 import oauth from "./oauth";
+import auth from "./auth";
 
 const api = new Elysia({ prefix: "/api" })
   .onError(({ code, error, set }) => {
@@ -14,6 +15,7 @@ const api = new Elysia({ prefix: "/api" })
   })
   .use(questions)
   .use(history)
-  .use(oauth);
+  .use(oauth)
+  .use(auth);
 
 export default api;

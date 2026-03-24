@@ -31,6 +31,7 @@ new Elysia()
           { name: "題目", description: "題目管理相關 API" },
           { name: "作答紀錄", description: "作答紀錄管理相關 API" },
           { name: "使用者驗證", description: "使用者 OAuth 相關 API" },
+          { name: "使用者驗證 (標準)", description: "標準 signIn / signUp 驗證 API" },
         ],
         components: {
           securitySchemes: {
@@ -39,7 +40,7 @@ new Elysia()
               scheme: "bearer",
               bearerFormat: "JWT",
               description:
-                "使用 /api/oauth/login 或 /api/oauth/register 取得的 JWT Token",
+                "使用 /api/oauth/login 、 /api/oauth/register 、 /api/auth/signIn 或 /api/auth/signUp 取得的 JWT Token",
             },
           },
         },

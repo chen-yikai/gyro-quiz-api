@@ -76,3 +76,15 @@ export interface JwtPayload {
 export interface OAuthJson {
   data: OAuthUser[];
 }
+
+// Standard Auth types
+export interface AuthUser {
+  userId: string;
+  email: string;
+  passwordHash: string;
+  createdAt: string;
+}
+
+export interface AuthJson {
+  data: AuthUser[];
+}
