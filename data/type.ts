@@ -60,24 +60,12 @@ export interface HistoryJson {
   data: HistoryEntry[];
 }
 
-// OAuth types
-export interface OAuthUser {
-  userId: string;
-  email: string;
-  passwordHash: string;
-  createdAt: string;
-}
-
+// Authentication types
 export interface JwtPayload {
   userId: string;
   email: string;
 }
 
-export interface OAuthJson {
-  data: OAuthUser[];
-}
-
-// Standard Auth types
 export interface AuthUser {
   userId: string;
   email: string;

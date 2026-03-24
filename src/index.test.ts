@@ -76,15 +76,15 @@ describe("Questions API", () => {
   });
 });
 
-describe("OAuth API", () => {
+describe("Auth API", () => {
   const testEmail = `test-${Date.now()}@example.com`;
   const testPassword = "testpassword123";
   let authToken: string;
   let userId: string;
 
-  it("POST /api/oauth/register - should register new user", async () => {
+  it("POST /api/auth/signUp - should register new user", async () => {
     const res = await app.handle(
-      new Request("http://localhost/api/oauth/register", {
+      new Request("http://localhost/api/auth/signUp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: testEmail, password: testPassword }),
@@ -99,9 +99,9 @@ describe("OAuth API", () => {
     userId = data.userId;
   });
 
-  it("POST /api/oauth/register - should reject duplicate email", async () => {
+  it("POST /api/auth/signUp - should reject duplicate email", async () => {
     const res = await app.handle(
-      new Request("http://localhost/api/oauth/register", {
+      new Request("http://localhost/api/auth/signUp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: testEmail, password: testPassword }),
@@ -112,9 +112,9 @@ describe("OAuth API", () => {
     expect(data).toHaveProperty("message");
   });
 
-  it("POST /api/oauth/login - should login successfully", async () => {
+  it("POST /api/auth/signIn - should login successfully", async () => {
     const res = await app.handle(
-      new Request("http://localhost/api/oauth/login", {
+      new Request("http://localhost/api/auth/signIn", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: testEmail, password: testPassword }),
@@ -127,9 +127,9 @@ describe("OAuth API", () => {
     authToken = data.token;
   });
 
-  it("POST /api/oauth/login - should reject wrong password", async () => {
+  it("POST /api/auth/signIn - should reject wrong password", async () => {
     const res = await app.handle(
-      new Request("http://localhost/api/oauth/login", {
+      new Request("http://localhost/api/auth/signIn", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: testEmail, password: "wrongpassword" }),
@@ -140,8 +140,8 @@ describe("OAuth API", () => {
     expect(data).toHaveProperty("message");
   });
 
-  it("GET /api/oauth/:userId - should return user info", async () => {
-    const res = await app.handle(new Request(`http://localhost/api/oauth/${userId}`));
+  it("GET /api/auth/:userId - should return user info", async () => {
+    const res = await app.handle(new Request(`http://localhost/api/auth/${userId}`));
     expect(res.status).toBe(200);
     const data = await res.json();
     expect(data.email).toBe(testEmail);
@@ -157,7 +157,7 @@ describe("History API", () => {
   beforeAll(async () => {
     // Register and get token
     const res = await app.handle(
-      new Request("http://localhost/api/oauth/register", {
+      new Request("http://localhost/api/auth/signUp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: testEmail, password: testPassword }),
@@ -231,7 +231,7 @@ describe("History API", () => {
 describe("Validation Errors", () => {
   it("should return uniform error format for validation errors", async () => {
     const res = await app.handle(
-      new Request("http://localhost/api/oauth/register", {
+      new Request("http://localhost/api/auth/signUp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: "invalid-email", password: "123" }),

@@ -1,7 +1,7 @@
 import { Elysia, t } from "elysia";
 import { jwt } from "@elysiajs/jwt";
 import type { HistoryEntry, HistoryJson, JwtPayload } from "../data/type";
-import { JWT_SECRET } from "./oauth";
+import { JWT_SECRET } from "./auth";
 
 const HISTORY_PATH = "./data/history.json";
 

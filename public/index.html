@@ -455,7 +455,7 @@
   </div>
 
   <script>
-    const API_BASE = '/api/oauth';
+    const API_BASE = '/api/auth';
     const urlParams = new URLSearchParams(window.location.search);
     const redirectUri = urlParams.get('redirect_uri') || 'gyroquiz://auth';
 
@@ -557,7 +557,7 @@
       setLoading(btn, true);
 
       try {
-        const res = await fetch(`${API_BASE}/login`, {
+        const res = await fetch(`${API_BASE}/signIn`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password })
@@ -589,7 +589,7 @@
       setLoading(btn, true);
 
       try {
-        const res = await fetch(`${API_BASE}/register`, {
+        const res = await fetch(`${API_BASE}/signUp`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password })

@@ -1,7 +1,8 @@
 import { Elysia, t } from "elysia";
 import { jwt } from "@elysiajs/jwt";
 import type { AuthUser, AuthJson } from "../data/type";
-import { JWT_SECRET } from "./oauth";
+
+const JWT_SECRET = process.env.JWT_SECRET || "gyro-quiz-secret-key-change-in-production";
 
 const AUTH_PATH = "./data/auth.json";
 
@@ -149,4 +150,5 @@ const auth = new Elysia({
     }
   );
 
+export { JWT_SECRET };
 export default auth;
