@@ -27,7 +27,6 @@ new Elysia()
             "知識競賽應用程式 API，提供題目管理及作答紀錄功能。\n\n作答紀錄 API 需要在 Header 加入 `Authorization: Bearer <token>`",
         },
         tags: [
-          { name: "頁面", description: "登入頁面" },
           { name: "題目", description: "題目管理相關 API" },
           { name: "作答紀錄", description: "作答紀錄管理相關 API" },
           { name: "使用者驗證 (標準)", description: "標準 signIn / signUp 驗證 API" },
