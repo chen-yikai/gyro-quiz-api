@@ -68,12 +68,7 @@ new Elysia()
           }),
         ),
       }),
-      detail: {
-        tags: ["頁面"],
-        summary: "登入頁面",
-        description:
-          "開啟登入/註冊頁面。登入成功後會將 token、userId、email 透過 redirect_uri 回傳給行動應用程式。回傳格式: `{redirect_uri}?token={token}&userId={userId}&email={email}`。範例: `gyroquiz://auth?token=eyJhbG...&userId=abc123&email=user@example.com`",
-      },
+      detail: { hide: true },
     },
   )
   .use(api)
