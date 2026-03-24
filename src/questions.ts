@@ -30,6 +30,12 @@ const difficultyRank: Record<Difficulty, number> = {
   hard: 3,
 };
 
+const tDifficulty = t.Union([
+  t.Literal("easy"),
+  t.Literal("medium"),
+  t.Literal("hard"),
+]);
+
 const questions = new Elysia({
   prefix: "/questions",
   tags: ["題目"],
@@ -73,9 +79,7 @@ const questions = new Elysia({
     },
     {
       query: t.Object({
-        filter: t.Optional(
-          t.Union([t.Literal("easy"), t.Literal("medium"), t.Literal("hard")])
-        ),
+        filter: t.Optional(tDifficulty),
         orderBy: t.Optional(
           t.Union([
             t.Literal("id"),
@@ -104,15 +108,18 @@ const questions = new Elysia({
     "/generate",
     async ({ query, set }) => {
       const parsed = await readQuestionsJson();
-      const difficulty = query.difficulty as Difficulty;
-      const filtered = parsed.data.filter(
-        (question) => question.difficulty === difficulty
+      const rawDifficulty = query.difficulty;
+      const difficulties = (
+        Array.isArray(rawDifficulty) ? rawDifficulty : [rawDifficulty]
+      ) as Difficulty[];
+      const filtered = parsed.data.filter((question) =>
+        difficulties.includes(question.difficulty)
       );
 
       if (filtered.length === 0) {
         set.status = 404;
         return {
-          message: `找不到難度為 '${difficulty}' 的題目`,
+          message: `找不到難度為 '${difficulties.join(", ")}' 的題目`,
         };
       }
 
@@ -123,16 +130,12 @@ const questions = new Elysia({
     {
       query: t.Object({
         quantity: t.Numeric({ minimum: 1 }),
-        difficulty: t.Union([
-          t.Literal("easy"),
-          t.Literal("medium"),
-          t.Literal("hard"),
-        ]),
+        difficulty: t.Union([tDifficulty, t.Array(tDifficulty)]),
       }),
       detail: {
         summary: "隨機產生題目",
         description:
-          "依據指定的難度和數量，隨機產生一組題目。若可用題目數量不足，將返回實際可用的數量。",
+          "依據指定的難度和數量，隨機產生一組題目。難度可指定單一值或多個值（重複 difficulty 參數）。若可用題目數量不足，將返回實際可用的數量。",
       },
     }
   )
