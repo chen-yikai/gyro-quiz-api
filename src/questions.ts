@@ -108,18 +108,15 @@ const questions = new Elysia({
     "/generate",
     async ({ query, set }) => {
       const parsed = await readQuestionsJson();
-      const rawDifficulty = query.difficulty;
-      const difficulties = (
-        Array.isArray(rawDifficulty) ? rawDifficulty : [rawDifficulty]
-      ) as Difficulty[];
-      const filtered = parsed.data.filter((question) =>
-        difficulties.includes(question.difficulty)
+      const difficulty = query.difficulty as Difficulty;
+      const filtered = parsed.data.filter(
+        (question) => question.difficulty === difficulty
       );
 
       if (filtered.length === 0) {
         set.status = 404;
         return {
-          message: `找不到難度為 '${difficulties.join(", ")}' 的題目`,
+          message: `找不到難度為 '${difficulty}' 的題目`,
         };
       }
 
@@ -130,12 +127,12 @@ const questions = new Elysia({
     {
       query: t.Object({
         quantity: t.Numeric({ minimum: 1 }),
-        difficulty: t.Union([tDifficulty, t.Array(tDifficulty)]),
+        difficulty: tDifficulty,
       }),
       detail: {
         summary: "隨機產生題目",
         description:
-          "依據指定的難度和數量，隨機產生一組題目。難度可指定單一值或多個值（重複 difficulty 參數）。若可用題目數量不足，將返回實際可用的數量。",
+          "依據指定的難度和數量，隨機產生一組題目。若可用題目數量不足，將返回實際可用的數量。",
       },
     }
   )
