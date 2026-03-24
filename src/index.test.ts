@@ -55,6 +55,19 @@ describe("Questions API", () => {
     expect(data.length).toBeLessThanOrEqual(3);
   });
 
+  it("GET /api/questions/generate - should support multiple difficulties", async () => {
+    const res = await app.handle(
+      new Request("http://localhost/api/questions/generate?quantity=5&difficulty=easy&difficulty=medium")
+    );
+    expect(res.status).toBe(200);
+    const data = await res.json();
+    expect(Array.isArray(data)).toBe(true);
+    expect(data.length).toBeLessThanOrEqual(5);
+    data.forEach((q: any) =>
+      expect(["easy", "medium"]).toContain(q.difficulty)
+    );
+  });
+
   it("GET /api/questions/:id - should return single question", async () => {
     // First get a valid question ID
     const listRes = await app.handle(new Request("http://localhost/api/questions?limit=1"));
