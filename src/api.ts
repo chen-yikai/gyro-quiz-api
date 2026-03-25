@@ -4,11 +4,11 @@ import history from "./history";
 import auth from "./auth";
 
 const api = new Elysia({ prefix: "/api" })
-  .onError(({ code, error, set }) => {
+  .onError(({ code, set }) => {
     switch (code) {
       case "VALIDATION":
         set.status = 400;
-        return { message: error.message };
+        return { message: "資料格式錯誤" };
       case "PARSE":
         set.status = 400;
         return { message: "請求內容格式錯誤" };

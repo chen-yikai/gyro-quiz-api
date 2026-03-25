@@ -252,7 +252,7 @@ describe("Validation Errors", () => {
     );
     expect(res.status).toBe(400);
     const data = await res.json();
-    expect(data).toHaveProperty("message");
+    expect(data.message).toBe("資料格式錯誤");
   });
 
   it("should return error for invalid query params", async () => {
@@ -261,7 +261,7 @@ describe("Validation Errors", () => {
     );
     expect(res.status).toBe(400);
     const data = await res.json();
-    expect(data).toHaveProperty("message");
+    expect(data.message).toBe("資料格式錯誤");
   });
 });
 
