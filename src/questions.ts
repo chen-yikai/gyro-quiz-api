@@ -6,8 +6,12 @@ type QuestionOrderBy = "id" | "content" | "difficulty";
 type SortDirection = "asc" | "desc";
 
 const readQuestionsJson = async (): Promise<QuestionsJson> => {
-  const content = await Bun.file(QUESTIONS_PATH).text();
-  return JSON.parse(content) as QuestionsJson;
+  try {
+    const content = await Bun.file(QUESTIONS_PATH).text();
+    return JSON.parse(content) as QuestionsJson;
+  } catch {
+    throw new Error("無法讀取題目資料");
+  }
 };
 
 const pickRandomQuestions = (

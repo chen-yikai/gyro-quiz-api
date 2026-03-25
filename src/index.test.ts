@@ -264,3 +264,27 @@ describe("Validation Errors", () => {
     expect(data).toHaveProperty("message");
   });
 });
+
+describe("Error Handling", () => {
+  it("should return 400 for malformed JSON body", async () => {
+    const res = await app.handle(
+      new Request("http://localhost/api/auth/signUp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: "invalid-json{",
+      })
+    );
+    expect(res.status).toBe(400);
+    const data = await res.json();
+    expect(data).toHaveProperty("message");
+  });
+
+  it("should return 404 for unknown route", async () => {
+    const res = await app.handle(
+      new Request("http://localhost/api/unknown-route")
+    );
+    expect(res.status).toBe(404);
+    const data = await res.json();
+    expect(data).toHaveProperty("message");
+  });
+});
