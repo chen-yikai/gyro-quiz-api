@@ -175,6 +175,39 @@ const history = new Elysia({
         security: [{ bearerAuth: [] }],
       },
     }
+  )
+  .delete(
+    "/:id",
+    async ({ params, set, user }) => {
+      const parsed = await readHistoryJson();
+      const index = parsed.data.findIndex((item) => item.id === params.id);
+
+      if (index === -1) {
+        set.status = 404;
+        return { message: `找不到 ID 為 '${params.id}' 的作答紀錄` };
+      }
+
+      // Only allow deletion of own records
+      if (parsed.data[index].userId !== user!.userId) {
+        set.status = 403;
+        return { message: "無權刪除此紀錄" };
+      }
+
+      const [deleted] = parsed.data.splice(index, 1);
+      await writeHistoryJson(parsed);
+
+      return deleted;
+    },
+    {
+      params: t.Object({
+        id: t.String(),
+      }),
+      detail: {
+        summary: "刪除作答紀錄",
+        description: "依據 ID 刪除特定遊戲的作答紀錄。需要 Bearer Token 驗證。",
+        security: [{ bearerAuth: [] }],
+      },
+    }
   );
 
 export default history;
